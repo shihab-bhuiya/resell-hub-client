@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ShoppingBag, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
+
 
 const SignInPage = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -12,10 +16,23 @@ const SignInPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form submitted: ", formData);
-        // Ready for your custom validation and API integration later!
+        console.log("form Data", formData);
+        const { data, error } = await authClient.signIn.email({
+            email: formData.email, // required
+            password: formData.password, // required
+            rememberMe: true,
+            callbackURL: "/",
+        });
+        if (data) {
+            toast.success("Login Succesfully");
+            redirect('/')
+        }
+        else {
+            toast.error(error?.message || "Something went wrong")
+        }
+
     };
 
     return (
@@ -93,7 +110,7 @@ const SignInPage = () => {
                 {/* Footer/Switch section */}
                 <p className="text-center text-sm text-white/40 mt-6">
                     Don&apos;t have an account?{" "}
-                    <Link href="/register" className="font-medium text-blue-400 hover:text-blue-300 transition">
+                    <Link href="/signup" className="font-medium text-blue-400 hover:text-blue-300 transition">
                         Sign up
                     </Link>
                 </p>
