@@ -1,162 +1,123 @@
+/** @format */
+
 "use client";
-import { useState } from "react";
+
+import React, { useState } from "react";
 import Link from "next/link";
+import { Menu, X, ShoppingBag } from "lucide-react";
 
-export default function Navbar() {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const ReSellHubNavBar = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Simulated Auth State (You will replace this with your Better Auth hooks later)
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userRole, setUserRole] = useState("seller"); // buyer, seller, admin
-
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
+    // Simple, clean navigation links array
+    const navItems = [
+        { label: "Browse Products", href: "/products" },
+        { label: "Categories", href: "/categories" },
+        { label: "About", href: "/about" },
+        { label: "Contact", href: "/contact" },
+    ];
 
     return (
-        <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-
-                    {/* Left Side: Logo & Public Links */}
-                    <div className="flex">
-                        <div className="flex-shrink-0 flex items-center">
-                            <Link href="/" className="text-2xl font-bold text-blue-600">
+        <nav className="sticky top-0 z-50 w-full bg-[#111111] px-3 py-4 md:px-6">
+            {/* Floating Glassmorphism Container */}
+            <div className="mx-auto flex max-w-7xl items-center justify-between rounded-[32px] border border-white/5 bg-white/5 px-5 py-4 backdrop-blur-xl">
+                {/* LEFT - Logo */}
+                <div className="flex items-center gap-10">
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 shadow-lg transition-transform group-hover:scale-105">
+                            <ShoppingBag className="h-5 w-5 text-white" strokeWidth={2} />
+                        </div>
+                        <div className="leading-none">
+                            <h1 className="text-lg font-bold tracking-tight text-white">
                                 ReSell Hub
-                            </Link>
+                            </h1>
+                            <p className="text-xs font-medium text-white/50">Marketplace</p>
                         </div>
-
-                        {/* Desktop Public Nav Links */}
-                        <div className="hidden md:ml-6 md:flex md:space-x-8 md:items-center">
-                            <Link href="/products" className="text-gray-600 hover:text-blue-600 px-1 pt-1 text-sm font-medium">
-                                Browse Products
-                            </Link>
-                            <Link href="/categories" className="text-gray-600 hover:text-blue-600 px-1 pt-1 text-sm font-medium">
-                                Categories
-                            </Link>
-                        </div>
-                    </div>
-
-                    {/* Right Side: Conditional Auth/Dashboard Links */}
-                    <div className="hidden md:flex md:items-center md:space-x-4">
-                        {isLoggedIn ? (
-                            <>
-                                {/* Dynamically point to the correct dashboard based on role */}
-                                {userRole === "buyer" && (
-                                    <Link href="/buyer-dashboard" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-                                        Buyer Panel
-                                    </Link>
-                                )}
-                                {userRole === "seller" && (
-                                    <Link href="/seller-dashboard" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-                                        Seller Panel
-                                    </Link>
-                                )}
-                                {userRole === "admin" && (
-                                    <Link href="/admin-dashboard" className="text-sm font-medium text-red-600 hover:text-red-700">
-                                        Admin Panel
-                                    </Link>
-                                )}
-
-                                <button
-                                    onClick={() => setIsLoggedIn(false)}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm font-medium transition"
-                                >
-                                    Log Out
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/login" className="text-gray-600 hover:text-blue-600 text-sm font-medium">
-                                    Log In
-                                </Link>
-                                <Link
-                                    href="/register"
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </div>
-
-                    {/* Mobile Menu Button Hamburger */}
-                    <div className="flex items-center md:hidden">
-                        <button
-                            onClick={toggleMobileMenu}
-                            type="button"
-                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
-                            aria-controls="mobile-menu"
-                            aria-expanded="false"
-                        >
-                            <span className="sr-only">Open main menu</span>
-                            {isMobileMenuOpen ? (
-                                // "X" Icon
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            ) : (
-                                // Hamburger Icon
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
-
+                    </Link>
                 </div>
+
+                {/* CENTER/RIGHT - DESKTOP NAV */}
+                <div className="hidden items-center md:flex">
+                    <div className="flex items-center gap-6 rounded-2xl border border-white/5 bg-white/5 px-6 py-2.5">
+                        {/* Map through navigation links */}
+                        {navItems.map((item, index) => (
+                            <React.Fragment key={item.label}>
+                                <Link
+                                    href={item.href}
+                                    className="text-sm font-medium text-gray-300 transition hover:text-white">
+                                    {item.label}
+                                </Link>
+                                {/* Visual divider line between links, hidden after the last link */}
+                                {index < navItems.length - 1 && (
+                                    <div className="h-5 w-px bg-white/10" />
+                                )}
+                            </React.Fragment>
+                        ))}
+
+                        <div className="h-5 w-px bg-white/10" />
+
+                        {/* Static Action Buttons */}
+                        <Link
+                            href="/signin"
+                            className="text-sm font-medium text-blue-400 transition hover:text-blue-300">
+                            Sign In
+                        </Link>
+
+                        <Link
+                            href="/signup"
+                            className="flex h-9 items-center justify-center rounded-xl bg-white px-4 text-sm font-semibold text-black shadow-md hover:bg-gray-200 transition-colors">
+                            Join Hub
+                        </Link>
+                    </div>
+                </div>
+
+                {/* MOBILE MENU TRIGGER */}
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="flex items-center justify-center rounded-xl p-2 text-white transition hover:bg-white/5 md:hidden">
+                    {isMenuOpen ? (
+                        <X className="h-6 w-6" />
+                    ) : (
+                        <Menu className="h-6 w-6" />
+                    )}
+                </button>
             </div>
 
-            {/* Mobile Menu Open/Close Panel */}
-            {isMobileMenuOpen && (
-                <div className="md:hidden" id="mobile-menu">
-                    <div className="pt-2 pb-3 space-y-1 px-2">
-                        <Link href="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">
-                            Browse Products
-                        </Link>
-                        <Link href="/categories" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">
-                            Categories
+            {/* MOBILE MENU DROPDOWN */}
+            {isMenuOpen && (
+                <div className="mx-auto mt-3 max-w-7xl rounded-3xl border border-white/5 bg-[#18181b] p-5 md:hidden">
+                    <div className="flex flex-col gap-2">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.label}
+                                href={item.href}
+                                className="rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition hover:bg-white/5 hover:text-white"
+                                onClick={() => setIsMenuOpen(false)}>
+                                {item.label}
+                            </Link>
+                        ))}
+
+                        <div className="my-2 h-px bg-white/10" />
+
+                        {/* Mobile Action Buttons */}
+                        <Link
+                            href="/login"
+                            className="rounded-xl px-4 py-3 text-sm font-medium text-blue-400 transition hover:bg-white/5"
+                            onClick={() => setIsMenuOpen(false)}>
+                            Sign In
                         </Link>
 
-                        <hr className="my-2 border-gray-200" />
-
-                        {isLoggedIn ? (
-                            <>
-                                {userRole === "buyer" && (
-                                    <Link href="/buyer-dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">
-                                        Buyer Panel
-                                    </Link>
-                                )}
-                                {userRole === "seller" && (
-                                    <Link href="/seller-dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">
-                                        Seller Panel
-                                    </Link>
-                                )}
-                                {userRole === "admin" && (
-                                    <Link href="/admin-dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-gray-50">
-                                        Admin Panel
-                                    </Link>
-                                )}
-                                <button
-                                    onClick={() => setIsLoggedIn(false)}
-                                    className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
-                                >
-                                    Log Out
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">
-                                    Log In
-                                </Link>
-                                <Link href="/register" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 hover:bg-gray-50">
-                                    Register
-                                </Link>
-                            </>
-                        )}
+                        <Link
+                            href="/register"
+                            className="mt-2 flex w-full items-center justify-center rounded-xl bg-white py-2.5 text-sm font-semibold text-black hover:bg-gray-200 transition-colors"
+                            onClick={() => setIsMenuOpen(false)}>
+                            Join Hub
+                        </Link>
                     </div>
                 </div>
             )}
         </nav>
     );
-}
+};
+
+export default ReSellHubNavBar;
