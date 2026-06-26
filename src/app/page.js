@@ -1,10 +1,11 @@
+import ReSellHubHero from "@/components/homepage/Banner";
 import Image from "next/image";
 
 export default function Home() {
   return (
     <div>
 
-      <h2>Hello</h2>
+      <ReSellHubHero />
 
     </div>
   );
