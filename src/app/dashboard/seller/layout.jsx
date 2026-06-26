@@ -1,12 +1,22 @@
+
+import { redirect } from "next/navigation";
+
+import { getUserSession } from "@/lib/core/session";
 import SellerSidebar from "@/components/dashboard/SellerSideBar";
 
+export default async function SellerLayout({ children }) {
+    const user = await getUserSession();
 
-export default function SellerLayout({ children }) {
+    if (!user) redirect("/signin");
+
+    if (user.role !== "seller") {
+        redirect("/unauthorized");
+    }
+
     return (
         <div className="flex">
             <SellerSidebar />
-
-            <main className="flex-1 bg-gray-50 min-h-screen p-6">
+            <main className="flex-1 p-6">
                 {children}
             </main>
         </div>
