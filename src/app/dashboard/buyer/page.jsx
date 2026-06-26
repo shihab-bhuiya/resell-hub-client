@@ -1,72 +1,56 @@
-import { getUserSession } from "@/lib/core/session";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import React from "react";
+"use client";
 
-const BuyerPage = async () => {
-    const user = await getUserSession();
+import React, { useEffect, useState } from "react";
 
-    if (user.role !== "buyer") {
-        redirect("/unauthorized");
+const BuyerOverviewPage = ({ user }) => {
+    const [overview, setOverview] = useState(null);
+
+    useEffect(() => {
+        fetchOverview();
+    }, []);
+
+    const fetchOverview = async () => {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/api/buyer-overview/${user.id}`
+        );
+
+        const data = await res.json();
+
+        if (data.success) {
+            setOverview(data.data);
+        }
+    };
+
+    if (!overview) {
+        return <div className="p-6">Loading...</div>;
     }
 
     return (
-        <div className="space-y-8 p-6">
+        <div className="p-6 space-y-8">
             <h1 className="text-3xl font-bold">
-                Buyer Dashboard
+                Buyer Overview
             </h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <Link
-                    href="/dashboard/buyer/orders"
-                    className="rounded-2xl bg-white p-6 shadow hover:shadow-lg transition"
-                >
-                    <h2 className="text-xl font-semibold">
-                        My Orders
-                    </h2>
-                    <p className="mt-2 text-gray-500">
-                        View purchased products
-                    </p>
-                </Link>
-
-                <Link
-                    href="/dashboard/buyer/wishlist"
-                    className="rounded-2xl bg-white p-6 shadow hover:shadow-lg transition"
-                >
-                    <h2 className="text-xl font-semibold">
-                        Wishlist
-                    </h2>
-                    <p className="mt-2 text-gray-500">
-                        Saved products
-                    </p>
-                </Link>
-
-                <Link
-                    href="/dashboard/buyer/tracking"
-                    className="rounded-2xl bg-white p-6 shadow hover:shadow-lg transition"
-                >
-                    <h2 className="text-xl font-semibold">
-                        Tracking
-                    </h2>
-                    <p className="mt-2 text-gray-500">
-                        Track delivery status
-                    </p>
-                </Link>
-
-                <Link
-                    href="/dashboard/buyer/profile"
-                    className="rounded-2xl bg-white p-6 shadow hover:shadow-lg transition"
-                >
-                    <h2 className="text-xl font-semibold">
-                        Profile
-                    </h2>
-                    <p className="mt-2 text-gray-500">
-                        Manage account
-                    </p>
-                </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+                <Card title="Total Orders" value={overview.totalOrders} />
+                <Card title="Pending Orders" value={overview.pendingOrders} />
+                <Card title="Completed" value={overview.completedOrders} />
+                <Card title="Wishlist" value={overview.wishlistCount} />
+                <Card title="Total Spent" value={`৳ ${overview.totalSpent}`} />
             </div>
         </div>
     );
 };
 
-export default BuyerPage;
+const Card = ({ title, value }) => {
+    return (
+        <div className="rounded-2xl bg-white shadow p-6">
+            <p className="text-sm text-gray-500">{title}</p>
+            <h2 className="text-3xl font-bold mt-3">
+                {value}
+            </h2>
+        </div>
+    );
+};
+
+export default BuyerOverviewPage;
