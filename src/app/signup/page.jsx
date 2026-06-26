@@ -46,13 +46,12 @@ const SignUpPage = () => {
             name: formData.name,
             email: formData.email,
             password: formData.password,
+            phone: formData.phone,
+            location: formData.location,
+            role: formData.role,
             callbackURL: "/",
             // CRITICAL FIX: Pass custom schema fields so your authentication database tracks them
-            metadata: {
-                phone: formData.phone,
-                location: formData.location,
-                role: formData.role,
-            },
+
         });
 
         if (data) {
