@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import React, { useState } from "react";
@@ -16,8 +18,7 @@ import { authClient } from "@/lib/auth-client";
 
 const ReSellHubNavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isProfileDropdownOpen, setIsProfileDropdownOpen] =
-        useState(false);
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
     const { data: session, isPending } = authClient.useSession();
     const user = session?.user;
@@ -47,12 +48,8 @@ const ReSellHubNavBar = () => {
                         </div>
 
                         <div className="leading-none">
-                            <h1 className="text-lg font-bold text-white">
-                                ReSell Hub
-                            </h1>
-                            <p className="text-xs text-white/50">
-                                Marketplace
-                            </p>
+                            <h1 className="text-lg font-bold text-white">ReSell Hub</h1>
+                            <p className="text-xs text-white/50">Marketplace</p>
                         </div>
                     </Link>
 
@@ -62,8 +59,7 @@ const ReSellHubNavBar = () => {
                             <Link
                                 key={item.label}
                                 href={item.href}
-                                className="text-sm font-medium text-gray-300 hover:text-white transition"
-                            >
+                                className="text-sm font-medium text-gray-300 hover:text-white transition">
                                 {item.label}
                             </Link>
                         ))}
@@ -71,19 +67,14 @@ const ReSellHubNavBar = () => {
                         <div className="h-5 w-px bg-white/10" />
 
                         {isPending ? (
-                            <span className="text-gray-400 text-sm">
-                                Loading...
-                            </span>
+                            <span className="text-gray-400 text-sm">Loading...</span>
                         ) : user ? (
                             <div className="relative">
                                 <button
                                     onClick={() =>
-                                        setIsProfileDropdownOpen(
-                                            !isProfileDropdownOpen
-                                        )
+                                        setIsProfileDropdownOpen(!isProfileDropdownOpen)
                                     }
-                                    className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-white/5"
-                                >
+                                    className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-white/5">
                                     <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center overflow-hidden">
                                         {user.image ? (
                                             <img
@@ -92,22 +83,15 @@ const ReSellHubNavBar = () => {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <User
-                                                size={16}
-                                                className="text-blue-400"
-                                            />
+                                            <User size={16} className="text-blue-400" />
                                         )}
                                     </div>
 
-                                    <span className="text-white text-sm">
-                                        {user.name}
-                                    </span>
+                                    <span className="text-white text-sm">{user.name}</span>
 
                                     <ChevronDown
                                         size={16}
-                                        className={`text-white transition ${isProfileDropdownOpen
-                                                ? "rotate-180"
-                                                : ""
+                                        className={`text-white transition ${isProfileDropdownOpen ? "rotate-180" : ""
                                             }`}
                                     />
                                 </button>
@@ -116,24 +100,21 @@ const ReSellHubNavBar = () => {
                                     <div className="absolute right-0 mt-3 w-56 rounded-2xl border border-white/5 bg-[#18181b] p-2 shadow-2xl">
                                         <Link
                                             href="/dashboard"
-                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
-                                        >
+                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
                                             <LayoutDashboard size={16} />
                                             Dashboard
                                         </Link>
 
                                         <Link
-                                            href="/profile"
-                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
-                                        >
+                                            href="/dashboard/seller/profile"
+                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
                                             <User size={16} />
                                             My Profile
                                         </Link>
 
                                         <Link
                                             href="/settings"
-                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
-                                        >
+                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
                                             <Settings size={16} />
                                             Settings
                                         </Link>
@@ -142,8 +123,7 @@ const ReSellHubNavBar = () => {
 
                                         <button
                                             onClick={handleSignOut}
-                                            className="flex w-full items-center gap-2 rounded-xl px-3 py-3 text-sm text-red-400 hover:bg-red-500/10"
-                                        >
+                                            className="flex w-full items-center gap-2 rounded-xl px-3 py-3 text-sm text-red-400 hover:bg-red-500/10">
                                             <LogOut size={16} />
                                             Sign Out
                                         </button>
@@ -154,15 +134,13 @@ const ReSellHubNavBar = () => {
                             <div className="flex items-center gap-3">
                                 <Link
                                     href="/signin"
-                                    className="text-sm font-medium text-violet-400 hover:text-violet-300"
-                                >
+                                    className="text-sm font-medium text-violet-400 hover:text-violet-300">
                                     Sign In
                                 </Link>
 
                                 <Link
                                     href="/signup"
-                                    className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-black hover:bg-gray-200"
-                                >
+                                    className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-black hover:bg-gray-200">
                                     Get Started
                                 </Link>
                             </div>
@@ -172,8 +150,7 @@ const ReSellHubNavBar = () => {
                     {/* Mobile Toggle */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="rounded-xl p-2 text-white md:hidden"
-                    >
+                        className="rounded-xl p-2 text-white md:hidden">
                         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
@@ -186,8 +163,7 @@ const ReSellHubNavBar = () => {
                                 <Link
                                     key={item.label}
                                     href={item.href}
-                                    className="rounded-xl px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
-                                >
+                                    className="rounded-xl px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
                                     {item.label}
                                 </Link>
                             ))}
@@ -198,22 +174,19 @@ const ReSellHubNavBar = () => {
                                 <>
                                     <Link
                                         href="/dashboard"
-                                        className="rounded-xl px-4 py-3 text-gray-300 hover:bg-white/5"
-                                    >
+                                        className="rounded-xl px-4 py-3 text-gray-300 hover:bg-white/5">
                                         Dashboard
                                     </Link>
 
                                     <Link
                                         href="/profile"
-                                        className="rounded-xl px-4 py-3 text-gray-300 hover:bg-white/5"
-                                    >
+                                        className="rounded-xl px-4 py-3 text-gray-300 hover:bg-white/5">
                                         Profile
                                     </Link>
 
                                     <button
                                         onClick={handleSignOut}
-                                        className="flex items-center gap-2 rounded-xl px-4 py-3 text-red-400 hover:bg-red-500/10"
-                                    >
+                                        className="flex items-center gap-2 rounded-xl px-4 py-3 text-red-400 hover:bg-red-500/10">
                                         <LogOut size={16} />
                                         Sign Out
                                     </button>
@@ -222,15 +195,13 @@ const ReSellHubNavBar = () => {
                                 <>
                                     <Link
                                         href="/signin"
-                                        className="rounded-xl px-4 py-3 text-blue-400 hover:bg-white/5"
-                                    >
+                                        className="rounded-xl px-4 py-3 text-blue-400 hover:bg-white/5">
                                         Sign In
                                     </Link>
 
                                     <Link
                                         href="/signup"
-                                        className="rounded-xl bg-white px-4 py-3 text-center text-black font-semibold"
-                                    >
+                                        className="rounded-xl bg-white px-4 py-3 text-center text-black font-semibold">
                                         Join Hub
                                     </Link>
                                 </>

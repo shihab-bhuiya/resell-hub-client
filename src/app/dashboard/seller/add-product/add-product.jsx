@@ -17,12 +17,36 @@ const AddProductPage = ({ user }) => {
         try {
             setLoading(true);
 
-            console.log("Form Data:", data);
+            // Get selected image
+            const imageFile = data.image[0];
 
-            // STEP 1: Upload image to ImgBB
-            // STEP 2: Get image URL
-            // STEP 3: Send product data to backend
+            if (!imageFile) {
+                toast.error("Please select an image");
+                return;
+            }
 
+            // Upload image to ImgBB
+            const formData = new FormData();
+            formData.append("image", imageFile);
+
+            const imageUploadResponse = await fetch(
+                `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            const imageResult = await imageUploadResponse.json();
+
+            if (!imageResult.success) {
+                throw new Error("Image upload failed");
+            }
+
+            // Image URL from ImgBB
+            const imageUrl = imageResult.data.url;
+
+            // Product Data
             const productData = {
                 title: data.title,
                 category: data.category,
@@ -33,10 +57,12 @@ const AddProductPage = ({ user }) => {
                 name: user.name,
                 email: user.email,
                 phone: data.phone,
-                images: [],
+                images: [imageUrl], // Store image URL
             };
-            console.log("Seller info", productData)
 
+            console.log(productData);
+
+            // Save product to database
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URI}/api/products`,
                 {
@@ -50,13 +76,15 @@ const AddProductPage = ({ user }) => {
 
             const result = await response.json();
 
-            if (result.success) {
-                toast.success("Product Added Successfully");
-                reset();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Failed to add product");
             }
+
+            toast.success("Product Added Successfully");
+            reset();
         } catch (error) {
-            toast.error(error.message || "Something Went Wrong");
             console.error(error);
+            toast.error(error.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -170,9 +198,18 @@ const AddProductPage = ({ user }) => {
 
                     <input
                         type="file"
-                        {...register("image")}
+                        accept="image/*"
+                        {...register("image", {
+                            required: "Product image is required",
+                        })}
                         className="w-full"
                     />
+
+                    {errors.image && (
+                        <p className="text-red-500 text-sm mt-1">
+                            {errors.image.message}
+                        </p>
+                    )}
                 </div>
 
                 {/* Description */}

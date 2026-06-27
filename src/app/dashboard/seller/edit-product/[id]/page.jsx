@@ -12,6 +12,7 @@ const EditProductPage = () => {
 
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const [currentImage, setCurrentImage] = useState("");
 
     const {
         register,
@@ -56,6 +57,30 @@ const EditProductPage = () => {
         try {
             setUpdating(true);
 
+            let imageUrl = currentImage;
+
+            // Upload new image if selected
+            if (formData.image && formData.image.length > 0) {
+                const imageData = new FormData();
+                imageData.append("image", formData.image[0]);
+
+                const imageRes = await fetch(
+                    `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`,
+                    {
+                        method: "POST",
+                        body: imageData,
+                    }
+                );
+
+                const imageResult = await imageRes.json();
+
+                if (!imageResult.success) {
+                    throw new Error("Image upload failed");
+                }
+
+                imageUrl = imageResult.data.url;
+            }
+
             const updatedProduct = {
                 title: formData.title,
                 category: formData.category,
@@ -63,6 +88,7 @@ const EditProductPage = () => {
                 price: Number(formData.price),
                 description: formData.description,
                 phone: formData.phone,
+                images: [imageUrl],
             };
 
             const response = await fetch(
@@ -78,17 +104,19 @@ const EditProductPage = () => {
 
             const result = await response.json();
 
-            if (result.success) {
-                toast("Product updated successfully");
-                router.push("/dashboard/seller/my-products");
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Failed to update product");
             }
+
+            toast.success("Product updated successfully");
+            router.push("/dashboard/seller/my-products");
         } catch (error) {
             console.error(error);
+            toast.error(error.message);
         } finally {
             setUpdating(false);
         }
     };
-
     if (loading) {
         return (
             <div className="p-10 text-xl font-semibold">
@@ -191,6 +219,26 @@ const EditProductPage = () => {
                     <input
                         {...register("phone")}
                         className="w-full border rounded-lg px-4 py-3"
+                    />
+                </div>
+                <div>
+                    <label className="block mb-2 font-medium">
+                        Product Image
+                    </label>
+
+                    {currentImage && (
+                        <img
+                            src={currentImage}
+                            alt="Product"
+                            className="w-40 h-40 object-cover rounded-lg border mb-3"
+                        />
+                    )}
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        {...register("image")}
+                        className="w-full"
                     />
                 </div>
 
