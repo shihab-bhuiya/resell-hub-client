@@ -28,7 +28,7 @@ export const sellerLinks = [
 export const buyerLinks = [
     {
         label: "Overview",
-        href: "/dashboard/buyer",
+        href: "/dashboard/buyer/overview",
     },
     {
         label: "My Orders",

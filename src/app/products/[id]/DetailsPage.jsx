@@ -1,20 +1,23 @@
+/** @format */
+
 "use client";
 
-import { getSession } from "@/lib/core/session";
-import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
-const ProductDetailsPage = ({ params, user }) => {
+const ProductDetailsPage = ({ user }) => {
     const { id } = useParams();
-    console.log("IDDD", id);
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
-        fetchProduct();
-    }, []);
+        if (id) {
+            fetchProduct();
+        }
+    }, [id]);
 
     const fetchProduct = async () => {
         try {
@@ -26,9 +29,12 @@ const ProductDetailsPage = ({ params, user }) => {
 
             if (data.success) {
                 setProduct(data.data);
+            } else {
+                toast.error("Product not found");
             }
         } catch (error) {
             console.error(error);
+            toast.error("Failed to load product");
         } finally {
             setLoading(false);
         }
@@ -36,77 +42,94 @@ const ProductDetailsPage = ({ params, user }) => {
 
     const handleWishlist = async () => {
         if (!user) {
-            alert("Please login first");
+            toast.error("Please login first");
             return;
         }
 
-        const wishlistData = {
-            buyerId: user.id,
-            productId: product._id,
-        };
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URI}/api/wishlist`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        buyerId: user.id,
+                        productId: product._id,
+                    }),
+                }
+            );
 
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URI}/api/wishlist`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(wishlistData),
+            const data = await res.json();
+
+            if (data.success) {
+                toast.success(data.message);
+            } else {
+                toast.error(data.message);
             }
-        );
-
-        const data = await res.json();
-
-        toast(data.message);
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
     };
 
-    const handleBuyNow = async () => {
+    const handlePayment = async () => {
         if (!user) {
             toast.error("Please login first");
             return;
         }
 
-        const orderData = {
-            buyerId: user.id,
-            buyerName: user.name,
-            sellerId: product.userId,
-            sellerName: product.name,
-            productId: product._id,
-            productTitle: product.title,
-            productPrice: product.price,
-        };
+        setProcessing(true);
 
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URI}/api/orders`,
-            {
+        try {
+            const response = await fetch("/api/checkout_sessions", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(orderData),
+                body: JSON.stringify({
+                    productId: product._id,
+                    productName: product.title,
+                    price: product.price,
+
+                    buyerId: user.id,
+                    buyerName: user.name,
+                    buyerEmail: user.email,
+
+                    sellerId: product.userId,
+                    sellerName: product.name,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                toast.error(data.message || "Unable to create payment session");
+                console.log("Error", error);
             }
-        );
-
-        const data = await res.json();
-
-        if (data.success) {
-            toast.success("Order created successfully");
+        } catch (error) {
+            console.error(error);
+            toast.error("Payment failed");
+        } finally {
+            setProcessing(false);
         }
     };
 
     if (loading) {
-        return <div className="p-6">Loading...</div>;
+        return <div className="p-6 text-center">Loading...</div>;
     }
 
     if (!product) {
-        return <div className="p-6">Product not found</div>;
+        return <div className="p-6 text-center">Product not found</div>;
     }
 
     return (
         <div className="max-w-7xl mx-auto p-6">
             <div className="grid md:grid-cols-2 gap-10">
-                {/* Left Side */}
+                {/* Product Image */}
                 <div>
                     <img
                         src={
@@ -114,15 +137,13 @@ const ProductDetailsPage = ({ params, user }) => {
                             "https://via.placeholder.com/500"
                         }
                         alt={product.title}
-                        className="w-full rounded-2xl shadow"
+                        className="w-full rounded-2xl shadow-lg"
                     />
                 </div>
 
-                {/* Right Side */}
+                {/* Product Details */}
                 <div className="space-y-5">
-                    <h1 className="text-4xl font-bold">
-                        {product.title}
-                    </h1>
+                    <h1 className="text-4xl font-bold">{product.title}</h1>
 
                     <p className="text-gray-500">
                         Category: {product.category}
@@ -132,7 +153,7 @@ const ProductDetailsPage = ({ params, user }) => {
                         Condition: {product.condition}
                     </p>
 
-                    <h2 className="text-3xl font-bold">
+                    <h2 className="text-3xl font-bold text-green-600">
                         ৳ {product.price}
                     </h2>
 
@@ -147,9 +168,7 @@ const ProductDetailsPage = ({ params, user }) => {
                     </div>
 
                     <div>
-                        <h3 className="font-semibold mb-2">
-                            Description
-                        </h3>
+                        <h3 className="font-semibold mb-2">Description</h3>
 
                         <p className="text-gray-600">
                             {product.description}
@@ -158,15 +177,16 @@ const ProductDetailsPage = ({ params, user }) => {
 
                     <div className="flex gap-4">
                         <button
-                            onClick={handleBuyNow}
-                            className="flex-1 rounded-xl bg-black text-white py-4 font-semibold"
+                            onClick={handlePayment}
+                            disabled={processing}
+                            className="flex-1 rounded-xl bg-black text-white py-4 font-semibold disabled:opacity-50"
                         >
-                            Buy Now
+                            {processing ? "Processing..." : "Buy Now"}
                         </button>
 
                         <button
                             onClick={handleWishlist}
-                            className="flex-1 rounded-xl border py-4 font-semibold"
+                            className="flex-1 rounded-xl border py-4 font-semibold hover:bg-gray-100"
                         >
                             Wishlist
                         </button>

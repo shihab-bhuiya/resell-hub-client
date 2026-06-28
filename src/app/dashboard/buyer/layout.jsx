@@ -3,6 +3,7 @@ import { getUserSession } from "@/lib/core/session";
 import { redirect } from "next/navigation";
 
 
+
 export default async function DashboardLayout({ children }) {
     const user = await getUserSession();
     if (user.role !== 'buyer') {
@@ -12,6 +13,7 @@ export default async function DashboardLayout({ children }) {
     return (
         <div className="flex">
             <DashboardSidebar user={user} />
+
             <main className="flex-1">
                 {children}
             </main>
