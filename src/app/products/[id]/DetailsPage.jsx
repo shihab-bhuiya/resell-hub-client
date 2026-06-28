@@ -91,16 +91,15 @@ const ProductDetailsPage = ({ user }) => {
                 body: JSON.stringify({
                     productId: product._id,
                     productName: product.title,
-                    price: product.price,
-
+                    productPrice: product.price,
                     buyerId: user.id,
                     buyerName: user.name,
                     buyerEmail: user.email,
-
                     sellerId: product.userId,
                     sellerName: product.name,
                 }),
             });
+            console.log("product.userId", product.userId)
 
             const data = await response.json();
 
@@ -108,7 +107,7 @@ const ProductDetailsPage = ({ user }) => {
                 window.location.href = data.url;
             } else {
                 toast.error(data.message || "Unable to create payment session");
-                console.log("Error", error);
+                console.log(data);
             }
         } catch (error) {
             console.error(error);

@@ -58,6 +58,7 @@ const AddProductPage = ({ user }) => {
                 email: user.email,
                 phone: data.phone,
                 status: "pending",
+                "sold": false,
                 images: [imageUrl], // Store image URL
             };
 

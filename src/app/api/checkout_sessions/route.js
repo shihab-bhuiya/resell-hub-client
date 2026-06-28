@@ -1,31 +1,61 @@
-import { NextResponse } from 'next/server'
-import { headers } from 'next/headers'
-import Stripe from 'stripe';
+import { NextResponse } from "next/server";
+import { stripe } from "@/lib/stripe";
 
-
-
-export async function POST() {
+export async function POST(req) {
     try {
-        const headersList = await headers()
-        const origin = headersList.get('origin')
+        const body = await req.json();
 
-        // Create Checkout Sessions from body params.
-        const session = await Stripe.checkout.sessions.create({
-            line_items: [
-                {
-                    // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-                    price: '{{PRICE_ID}}',
-                    quantity: 1,
+        const {
+            productName,
+            productPrice,
+            productId,
+            buyerId,
+            sellerId,
+        } = body;
+
+        const session =
+            await stripe.checkout.sessions.create({
+                payment_method_types: ["card"],
+                mode: "payment",
+
+                line_items: [
+                    {
+                        price_data: {
+                            currency: "usd",
+                            product_data: {
+                                name: productName,
+                            },
+                            unit_amount:
+                                productPrice * 100,
+                        },
+                        quantity: 1,
+                    },
+                ],
+
+                success_url:
+                    `${process.env.BETTER_AUTH_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+
+                cancel_url:
+                    `${process.env.BETTER_AUTH_URL}/payment-cancel`,
+
+                metadata: {
+                    productId,
+                    buyerId,
+                    sellerId,
                 },
-            ],
-            mode: 'payment',
-            success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+            });
+
+        return NextResponse.json({
+            url: session.url,
         });
-        return NextResponse.redirect(session.url, 303)
-    } catch (err) {
+    } catch (error) {
         return NextResponse.json(
-            { error: err.message },
-            { status: err.statusCode || 500 }
-        )
+            {
+                error: error.message,
+            },
+            {
+                status: 500,
+            }
+        );
     }
 }
