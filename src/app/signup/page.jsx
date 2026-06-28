@@ -49,6 +49,7 @@ const SignUpPage = () => {
             phone: formData.phone,
             location: formData.location,
             role: formData.role,
+            staus: "active",
             callbackURL: "/",
             // CRITICAL FIX: Pass custom schema fields so your authentication database tracks them
 
