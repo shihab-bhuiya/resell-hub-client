@@ -17,24 +17,10 @@ const createProduct = async (req, res) => {
     }
 };
 
-const getSellerProducts = async (req, res) => {
-    try {
-        const { sellerId } = req.params;
-
-        const products = await Product.find({
-            "sellerInfo.userId": sellerId,
-        }).sort({ createdAt: -1 });
-
-        res.json({
-            success: true,
-            data: products,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+const getSellerProducts = async ({ id }) => {
+    const product = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URI}//api/products/${id}`);
+    const res = product.json();
+    return res;
 };
 
 module.exports = {

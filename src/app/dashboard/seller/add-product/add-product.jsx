@@ -45,7 +45,7 @@ const AddProductPage = ({ user }) => {
 
             // Image URL from ImgBB
             const imageUrl = imageResult.data.url;
-
+            console.log("imagre", imageUrl)
             // Product Data
             const productData = {
                 title: data.title,

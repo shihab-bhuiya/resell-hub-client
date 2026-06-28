@@ -51,14 +51,22 @@ export const buyerLinks = [
 export const adminLinks = [
     {
         label: "Overview",
-        href: "/dashboard/admin",
+        href: "/dashboard/admin/overview",
     },
     {
-        label: "Users",
+        label: "Manage Users",
         href: "/dashboard/admin/users",
     },
     {
-        label: "Products",
+        label: "Manage Products",
         href: "/dashboard/admin/products",
+    },
+    {
+        label: "Manage Orders",
+        href: "/dashboard/admin/orders",
+    },
+    {
+        label: "Analytics",
+        href: "/dashboard/admin/analytics",
     },
 ];

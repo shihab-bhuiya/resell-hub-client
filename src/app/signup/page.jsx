@@ -92,7 +92,7 @@ const SignUpPage = () => {
                             {[
                                 { id: "buyer", label: "Buyer", desc: "Browse & Purchase" },
                                 { id: "seller", label: "Seller", desc: "List & Earn Money" },
-                                { id: "admin", label: "Admin", desc: "Platform Overseer" },
+
                             ].map((roleOption) => {
                                 const isSelected = formData.role === roleOption.id;
                                 return (

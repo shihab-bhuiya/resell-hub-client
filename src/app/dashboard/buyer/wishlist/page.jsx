@@ -1,68 +1,16 @@
-"use client";
 
-import React, { useEffect, useState } from "react";
+import { getUserSession } from '@/lib/core/session';
+import WishlistPage from './WishList';
 
-const WishlistPage = ({ user }) => {
-    const [wishlist, setWishlist] = useState([]);
-
-    useEffect(() => {
-        fetchWishlist();
-    }, []);
-
-    const fetchWishlist = async () => {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URI}/api/wishlist/${user.id}`
-        );
-
-        const data = await res.json();
-
-        if (data.success) {
-            setWishlist(data.data);
-        }
-    };
-
-    const removeWishlist = async (id) => {
-        await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URI}/api/wishlist/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        fetchWishlist();
-    };
+const MyProducts = async () => {
+    const user = await getUserSession();
+    console.log("USer", user);
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-8">
-                Wishlist
-            </h1>
-
-            {wishlist.length === 0 ? (
-                <p>No saved products</p>
-            ) : (
-                <div className="space-y-4">
-                    {wishlist.map((item) => (
-                        <div
-                            key={item._id}
-                            className="bg-white rounded-xl shadow p-5"
-                        >
-                            <p>Product ID: {item.productId}</p>
-
-                            <button
-                                onClick={() =>
-                                    removeWishlist(item._id)
-                                }
-                                className="mt-3 bg-red-500 text-white px-4 py-2 rounded"
-                            >
-                                Remove
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
+        <div>
+            <WishlistPage user={user} />
         </div>
     );
 };
 
-export default WishlistPage;
+export default MyProducts;
