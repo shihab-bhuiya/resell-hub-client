@@ -6,6 +6,7 @@ import { ShoppingBag, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
+import { FaGoogle } from "react-icons/fa";
 
 
 const SignInPage = () => {
@@ -34,6 +35,20 @@ const SignInPage = () => {
         }
 
     };
+    const signInGoogle = async () => {
+        const { data, error } = await authClient.signIn.social({
+            provider: "google",
+            callbackURL: "/",
+        });
+
+        console.log("DATA:", data);
+        console.log("ERROR:", error);
+
+        if (error) {
+            toast.error(error.message);
+        }
+    };
+
 
     return (
         <div className="min-h-[calc(100vh-88px)] bg-[#111111] flex items-center justify-center px-4 py-12">
@@ -105,6 +120,28 @@ const SignInPage = () => {
                         Sign In
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </button>
+                    <div className="mt-6">
+                        {/* Divider */}
+                        <div className="flex items-center gap-4">
+                            <div className="h-px flex-1 bg-gray-600"></div>
+
+                            <span className="text-sm text-gray-300 whitespace-nowrap">
+                                Or continue with Google
+                            </span>
+
+                            <div className="h-px flex-1 bg-gray-600"></div>
+                        </div>
+
+                        {/* Google Button */}
+                        <button onClick={signInGoogle}
+                            className="mt-5 flex w-full items-center justify-center gap-3 rounded-lg border border-gray-600 bg-white px-4 py-3 font-medium text-gray-800 transition hover:bg-gray-100"
+                        >
+                            <FaGoogle className="text-red-500 text-lg" />
+                            Login with Google
+                        </button>
+                    </div>
+
+
                 </form>
 
                 {/* Footer/Switch section */}
@@ -115,8 +152,8 @@ const SignInPage = () => {
                     </Link>
                 </p>
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

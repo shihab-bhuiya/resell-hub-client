@@ -18,6 +18,7 @@ import {
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
+import { FaGoogle } from "react-icons/fa";
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -63,6 +64,11 @@ const SignUpPage = () => {
             console.error("Registration Error Details:", error);
         }
     };
+    const signInGoogle = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+    }
 
 
     return (
@@ -237,13 +243,33 @@ const SignUpPage = () => {
                         Complete Registration
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </button>
+                    <div className="mt-6">
+                        {/* Divider */}
+                        <div className="flex items-center gap-4">
+                            <div className="h-px flex-1 bg-gray-600"></div>
+
+                            <span className="text-sm text-gray-300 whitespace-nowrap">
+                                Or continue with Google
+                            </span>
+
+                            <div className="h-px flex-1 bg-gray-600"></div>
+                        </div>
+
+                        {/* Google Button */}
+                        <button onClick={signInGoogle}
+                            className="mt-5 flex w-full items-center justify-center gap-3 rounded-lg border border-gray-600 bg-white px-4 py-3 font-medium text-gray-800 transition hover:bg-gray-100"
+                        >
+                            <FaGoogle className="text-red-500 text-lg" />
+                            Login with Google
+                        </button>
+                    </div>
                 </form>
 
                 {/* Form Bottom Link */}
                 <p className="text-center text-sm text-white/40 mt-6">
                     Already have a marketplace account?{" "}
                     <Link
-                        href="/login"
+                        href="/signin"
                         className="font-medium text-blue-400 hover:text-blue-300 transition">
                         Sign in
                     </Link>

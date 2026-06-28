@@ -1,267 +1,357 @@
 # ReSell Hub — Second-Hand Marketplace Platform
 
-## Live Project
+## Live Website
 
-* **Client:** [Add Live URL]
-* **Server:** [Add Backend URL]
+**Live Site:** *(Add your deployed URL here)*
 
-## Admin Credentials
+## Repositories
 
-* **Email:** [Admin Email]
-* **Password:** [Admin Password]
-
----
-
-## Project Overview
-
-ReSell Hub is a full-stack role-based marketplace platform designed for buying and selling second-hand products securely and efficiently.
-
-The platform connects buyers and sellers in a trusted ecosystem where sellers can list pre-owned products, buyers can discover affordable products, and administrators can monitor platform activity.
-
-The main goal of this platform is to promote sustainable consumption, reduce product waste, and create economic opportunities through product resale.
-
-Inspired by platforms such as [eBay](https://www.ebay.com/?utm_source=chatgpt.com), [OLX](https://www.olx.com/?utm_source=chatgpt.com), and [Facebook Marketplace](https://www.facebook.com/marketplace/?utm_source=chatgpt.com).
+**Client Repository:** *(Add client GitHub URL)*
+**Server Repository:** *(Add server GitHub URL)*
 
 ---
 
-## Key Features
+# Project Overview
 
-### Authentication & Security
+ReSell Hub is a full-stack second-hand marketplace platform where users can safely buy and sell pre-owned products. The platform aims to reduce waste, encourage sustainable consumption, and create earning opportunities for sellers by helping them sell unused products.
 
-* Email/password authentication
+Buyers can browse products, add items to wishlist, complete secure payments, and track order history. Sellers can manage product listings and incoming orders. Admins have complete control over users, products, orders, and analytics.
+
+This project was built to simulate a production-level marketplace system with role-based dashboards, secure payments, product moderation, and scalable backend architecture.
+
+---
+
+# Project Purpose
+
+The main goal of ReSell Hub is to solve real-world marketplace problems:
+
+* Reduce reusable product waste
+* Promote sustainable shopping
+* Enable affordable purchasing
+* Help users earn from unused products
+* Build a secure multi-role marketplace platform
+
+---
+
+# Key Features
+
+## Public Features
+
+* Modern responsive marketplace UI
+* Browse all approved products
+* Product details page
+* Category-based product filtering
+* Search products by title/category
+* Advanced sorting (price & alphabetical)
+* Responsive navbar and footer
+* Animated homepage sections using Framer Motion
+
+---
+
+## Authentication
+
+* Email/password authentication using Better Auth
 * Google authentication
-* Role-based access control
-* Protected private routes
-* Secure API authorization
-* Environment variable protection
+* Persistent login sessions
+* Role-based dashboard access
+
+> JWT protected APIs are currently being integrated as the final security enhancement.
 
 ---
 
-### Buyer Features
+# Buyer Dashboard
 
-* Browse marketplace products
-* View product details
-* Add products to wishlist
-* Secure Stripe checkout
+Buyers can:
+
+* View dashboard overview
+* Purchase products
+* Save items to wishlist
 * View payment history
-* Manage orders
-* Update profile
+* Track orders
+* View payment success page
+* Manage profile
+
+### Buyer Overview Includes
+
+* Total Orders
+* Wishlist Count
+* Recent Purchases
 
 ---
 
-### Seller Features
+# Seller Dashboard
 
-* Seller dashboard
-* Add product listings
+Sellers can:
+
+* Add new products
+* Manage listed products
 * Edit/Delete products
-* Manage customer orders
-* Track revenue
-* Sales analytics
+* View sales overview
+* Manage incoming orders
+* Track pending orders
+* View revenue analytics
+
+### Seller Overview Includes
+
+* Total Products
+* Total Sales
+* Total Revenue
+* Pending Orders
 
 ---
 
-### Admin Features
+# Admin Dashboard
+
+Admins have full platform control.
+
+Admin can:
 
 * Manage users
-* Block/unblock accounts
-* Manage products
-* Approve/reject listings
-* Manage platform orders
-* Platform analytics dashboard
+* Block/Unblock users
+* Delete users
+* Approve products
+* Reject products
+* Delete products
+* Manage orders
+* Monitor platform analytics
 
 ---
 
-### Payment System
+# Product Approval System
 
-Integrated secure payments using [Stripe](https://stripe.com/?utm_source=chatgpt.com).
+ReSell Hub includes an admin moderation workflow.
 
-Features:
+### Workflow
 
-* Secure card payment
-* Payment validation
-* Transaction storage
-* Order creation after successful payment
-* Payment history tracking
+Seller adds product
+→ Product status becomes **pending**
+→ Admin reviews product
+→ Admin approves/rejects product
+→ Only approved products become public
+
+This ensures marketplace quality and prevents suspicious listings.
 
 ---
 
-## Tech Stack
+# Payment System
 
-### Frontend
+Integrated with **Stripe** for secure checkout.
 
-* [Next.js](https://nextjs.org/?utm_source=chatgpt.com)
+### Payment Workflow
+
+Buyer selects product
+→ Checkout session created
+→ Secure Stripe payment
+→ Payment success page
+→ Order created
+→ Payment stored in database
+
+### Stored Payment Data
+
+* Transaction ID
+* Buyer ID
+* Product ID
+* Payment Amount
+* Payment Status
+* Payment Method
+* Payment Date
+
+Payment statuses:
+
+* Pending
+* Paid
+* Failed
+
+---
+
+# Homepage Sections
+
+* Hero Banner
+* Featured Products
+* Popular Categories
+* Success Stories
+* Marketplace Statistics
+* Sustainability Impact
+* Trusted Sellers Showcase
+
+---
+
+# Database Collections
+
+## Users
+
+Stores:
+
+* User profile
+* Role
+* Account status
+* Contact info
+
+## Products
+
+Stores:
+
+* Product details
+* Price
+* Category
+* Seller information
+* Approval status
+
+## Orders
+
+Stores:
+
+* Buyer info
+* Seller info
+* Product reference
+* Order status
+
+## Payments
+
+Stores:
+
+* Transaction details
+* Payment status
+* Payment amount
+* Payment timestamps
+
+## Wishlist
+
+Stores buyer saved products.
+
+---
+
+# Admin Analytics
+
+Platform analytics include:
+
+* Total Users
+* Total Products
+* Total Orders
+* Revenue Insights
+* User Growth
+* Category Performance
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* Next.js
 * React
+* JavaScript
 * Tailwind CSS
-* React Hook Form
-* Better Auth
-* React Hot Toast
+* Framer Motion
 * Lucide React
+* React Hot Toast
 
-### Backend
+## Backend
 
-* [Node.js](https://nodejs.org/?utm_source=chatgpt.com)
-* [Express.js](https://expressjs.com/?utm_source=chatgpt.com)
-* JWT Authentication
+* Node.js
+* Express.js
+* REST API Architecture
 
-### Database
+## Database
 
-* [MongoDB](https://www.mongodb.com/?utm_source=chatgpt.com)
+* MongoDB
 
-### Payment
+## Authentication & Payment
 
-* Stripe Checkout
-
-### Deployment
-
-* Vercel (Frontend)
-* Render / Railway / VPS (Backend)
+* Better Auth
+* Stripe
 
 ---
 
-## Database Collections
+# NPM Packages Used
 
-* Users
-* Products
-* Orders
-* Payments
-* Reviews
-* Wishlist
-
----
-
-## NPM Packages Used
-
-### Frontend
+## Frontend
 
 ```bash
 next
 react
 tailwindcss
-react-hook-form
+framer-motion
 lucide-react
 react-hot-toast
-stripe
-@stripe/stripe-js
 ```
 
-### Backend
+## Backend
 
 ```bash
 express
-mongodb
 cors
 dotenv
-jsonwebtoken
+mongodb
 stripe
 ```
 
 ---
 
-## Installation
+# Challenges Faced
 
-### Clone Client
+During development, several engineering challenges were solved:
 
-```bash
-git clone <client-repo>
-cd client
-npm install
-npm run dev
-```
+* Stripe payment session handling
+* Order creation after payment success
+* Product approval workflow
+* Role-based dashboard architecture
+* Buyer/seller/admin separation
+* Dynamic analytics generation
 
-### Clone Server
-
-```bash
-git clone <server-repo>
-cd server
-npm install
-npm run dev
-```
+These challenges improved full-stack architecture and debugging skills.
 
 ---
 
-## Environment Variables
+# Future Improvements
 
-### Client
+Planned enhancements:
 
-```env
-NEXT_PUBLIC_SERVER_URI=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-```
-
-### Server
-
-```env
-PORT=
-MONGODB_URI=
-JWT_SECRET=
-STRIPE_SECRET_KEY=
-BETTER_AUTH_SECRET=
-```
-
----
-
-## Architecture
-
-```txt
-Client (Next.js)
-     ↓
-API Layer (Express)
-     ↓
-MongoDB Database
-     ↓
-Stripe Payment Gateway
-```
-
----
-
-## Future Improvements
-
-* Product reviews & ratings
-* Seller verification badges
-* AI-based product recommendation
-* Product comparison
+* JWT protected APIs
+* Role-based middleware authorization
+* Pagination
+* Product comparison feature
+* Dark/light mode
+* Seller verification badge
+* Product reporting system
 * Advanced filtering
-* Real-time notifications
 
 ---
 
-## Why This Project Stands Out
+# Security
 
-ReSell Hub demonstrates production-level full-stack engineering concepts:
+Sensitive credentials are stored using environment variables:
 
-* Role-based architecture
-* Secure payment integration
-* Protected APIs
-* Dashboard analytics
-* Marketplace workflow design
-* Real-world CRUD complexity
+* Better Auth keys
+* MongoDB URI
+* Stripe keys
+* JWT Secret (planned)
 
-This project reflects practical skills required for modern frontend and full-stack engineering roles.
+Security practices:
 
-Folder Structure
-Public
- ├─ Home
- ├─ Browse Products
- └─ Product Details
+* Protected private routes
+* Hidden environment credentials
+* Secure payment flow
+* Role-based access control
 
-Seller
- ├─ Overview
- ├─ Add Product
- ├─ My Products
- ├─ Orders
- ├─ Analytics
- └─ Profile
+---
 
-Buyer
- ├─ Overview
- ├─ Orders
- ├─ Wishlist
- ├─ Payments
- └─ Profile
+# Developer
 
-Admin
- ├─ Overview
- ├─ Users
- ├─ Products
- ├─ Orders
- └─ Analytics
+**Shihab Bhuiya**
+Full Stack Developer (Learning & Building)
+
+Focused on:
+
+* Full-stack web development
+* Problem solving
+* Clean architecture
+* Scalable backend systems
+
+---
+
+# Final Notes
+
+ReSell Hub is more than an academic assignment. It demonstrates real-world marketplace engineering concepts including authentication, payments, product moderation, role-based dashboards, analytics, and scalable database design.
+
+This project reflects my growth in full-stack development and my ability to design complete production-style systems.
