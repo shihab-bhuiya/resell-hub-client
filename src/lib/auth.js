@@ -24,8 +24,11 @@ export const auth = betterAuth({
     user: {
         additionalFields: {
             role: {
-                default: "buyer"
-            }
-        }
-    }
+                type: "string",
+                required: true,
+                defaultValue: "buyer",
+                input: false, // user cannot overwrite role
+            },
+        },
+    },
 });
