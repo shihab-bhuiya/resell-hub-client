@@ -3,9 +3,9 @@
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccess() {
     const searchParams = useSearchParams();
     const sessionId = searchParams.get("session_id");
 
@@ -19,16 +19,11 @@ export default function PaymentSuccessPage() {
         try {
             const res = await fetch("/api/payment-session", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    sessionId,
-                }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId }),
             });
 
             const data = await res.json();
-
             console.log("Stripe Session:", data);
 
             if (data.success) {
@@ -51,14 +46,13 @@ export default function PaymentSuccessPage() {
                 paymentMethod: "card",
                 paymentDate: new Date(),
             };
-            console.log("payment Data", paymentData)
+            console.log("payment Data", paymentData);
+
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URI}/api/payments`,
                 {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(paymentData),
                 }
             );
@@ -90,7 +84,6 @@ export default function PaymentSuccessPage() {
                     <p className="text-green-700 font-medium">
                         ✔ Your order is now being processed.
                     </p>
-
                     <p className="text-sm text-gray-500 mt-2">
                         You will receive an email confirmation shortly with your
                         order details.
@@ -114,5 +107,13 @@ export default function PaymentSuccessPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PaymentSuccessPage() {
+    return (
+        <Suspense>
+            <PaymentSuccess />
+        </Suspense>
     );
 }
