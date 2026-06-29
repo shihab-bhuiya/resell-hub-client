@@ -105,12 +105,7 @@ const ReSellHubNavBar = () => {
                                             Dashboard
                                         </Link>
 
-                                        <Link
-                                            href="/dashboard/seller/profile"
-                                            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
-                                            <User size={16} />
-                                            My Profile
-                                        </Link>
+
 
                                         <Link
                                             href="/settings"
