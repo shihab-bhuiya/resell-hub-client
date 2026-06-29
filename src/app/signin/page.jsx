@@ -153,6 +153,11 @@ const SignInPage = () => {
                 </p>
 
             </div >
+            <div>
+                <h2>Admin Email and Password</h2>
+                <p>email: admin@gmail.com</p>
+                <p>password: admin123</p>
+            </div>
         </div >
     );
 };
