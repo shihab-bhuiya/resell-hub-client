@@ -2,7 +2,7 @@
 
 ## Live Website
 
-**Live Site:** *(Add your deployed URL here)*
+**Live Site:** (https://resell-hub-client-mu.vercel.app)
 
 ## Repositories
 
